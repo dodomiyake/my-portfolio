@@ -58,4 +58,4 @@ Thumbs.db
 
 # Temp files
 tmp/
-.tmp/
+.tmp/node_modules/
