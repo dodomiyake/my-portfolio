@@ -19,7 +19,7 @@ mongoose
 const corsOptions = {
     origin: [
         "http://localhost:5173", // ✅ Allow local development
-        "https://my-portfoilio-1.onrender.com" // ✅ Allow Render frontend
+        "https://my-portfolio-ro0z.onrender.com" // ✅ Allow Render frontend
     ],
     methods: "GET,POST,PUT,DELETE",
     allowedHeaders: "Content-Type,Authorization"
