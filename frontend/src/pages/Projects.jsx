@@ -20,7 +20,7 @@ const Projects = () => {
     }, []);
 
     return (
-        <div id="projects" className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6 py-12">
+        <div id="projects" className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6 py-12 pt-24">
             <h2 className="text-5xl font-bold mb-8 text-neutral-100">My Projects</h2>
 
             {loading ? (
