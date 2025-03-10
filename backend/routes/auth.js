@@ -57,4 +57,21 @@ router.post("/login", async (req, res) => {
     }
 });
 
+// Admin Credentials (For Testing - Move to .env in Production)
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@example.com";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "Admin123!";
+
+// Login Route
+router.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+
+    if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
+        return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // Generate a JWT Token
+    const token = jwt.sign({ email, role: "admin" }, process.env.JWT_SECRET, { expiresIn: "2h" });
+    res.json({ token });
+});
+
 module.exports = router;

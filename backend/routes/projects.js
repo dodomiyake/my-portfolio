@@ -37,31 +37,22 @@ router.get('/projects', async (req, res) => {
 });
 
 // ✅ Create a new project (Protected)
-router.post('/projects', authMiddleware, upload.single('image'), async (req, res) => {
+// Protect the Upload API
+router.post("/projects", authMiddleware, upload.single("image"), async (req, res) => {
     try {
-        console.log("📤 Request received:", req.body);
-        console.log("🖼 File received:", req.file);
-
-        if (!req.file) {
-            return res.status(400).json({ error: "No image uploaded. Ensure you are using 'image' as the field name." });
-        }
-
-        const imageUrl = req.file.path;
-
+        const imageUrl = req.file ? req.file.path : null;
         const project = new Project({
             title: req.body.title,
             description: req.body.description,
             image: imageUrl,
-            technologies: req.body.technologies ? req.body.technologies.split(',').map(tech => tech.trim()) : [],
+            technologies: req.body.technologies ? req.body.technologies.split(",").map(tech => tech.trim()) : [],
             liveDemo: req.body.liveDemo,
             sourceCode: req.body.sourceCode,
         });
-
         await project.save();
         res.status(201).json(project);
     } catch (err) {
-        console.error('🔥 Error creating project:', err);
-        res.status(500).json({ error: 'Failed to create project' });
+        res.status(500).json({ message: "Failed to create project" });
     }
 });
 

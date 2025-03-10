@@ -17,7 +17,7 @@ mongoose
 
 // ✅ CORS Configuration (Restrict to frontend)
 const corsOptions = {
-    origin: process.env.CLIENT_URL || 'http://localhost:3000', // Allow frontend only
+    origin: process.env.CLIENT_URL || 'http://localhost:5173', // Allow frontend only
     methods: 'GET,POST,PUT,DELETE',
     allowedHeaders: 'Content-Type,Authorization'
 };
