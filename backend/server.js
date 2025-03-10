@@ -17,10 +17,14 @@ mongoose
 
 // ✅ CORS Configuration (Restrict to frontend)
 const corsOptions = {
-    origin: process.env.CLIENT_URL || 'http://localhost:5173', // Allow frontend only
-    methods: 'GET,POST,PUT,DELETE',
-    allowedHeaders: 'Content-Type,Authorization'
+    origin: [
+        "http://localhost:5173", // ✅ Allow local development
+        "https://my-portfoilio-1.onrender.com" // ✅ Allow Render frontend
+    ],
+    methods: "GET,POST,PUT,DELETE",
+    allowedHeaders: "Content-Type,Authorization"
 };
+
 
 app.use(cors(corsOptions)); // Apply CORS settings
 app.use(express.json()); // ✅ Allows JSON data in request body (req.body)
