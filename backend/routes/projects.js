@@ -112,6 +112,68 @@ router.delete('/projects/:id', authMiddleware, async (req, res) => {
 });
 
 
+// ✅ Update Project by ID (Admin Only)
+router.put("/projects/:id", authMiddleware, upload.single("image"), async (req, res) => {
+    try {
+        const projectId = req.params.id;
+        let updates = {
+            title: req.body.title,
+            description: req.body.description,
+            technologies: req.body.technologies ? req.body.technologies.split(',').map(tech => tech.trim()) : undefined,
+            liveDemo: req.body.liveDemo,
+            sourceCode: req.body.sourceCode
+        };
+
+        // ✅ Handle new image upload
+        if (req.file) {
+            const project = await Project.findById(projectId);
+            if (project.image) {
+                // ✅ Delete old image from Cloudinary
+                const cloudinaryUrlParts = project.image.split("/upload/");
+                let publicId = cloudinaryUrlParts[1].split(".")[0]; // Remove extension
+                publicId = publicId.replace(/^v\d+\//, ""); // Remove versioning
+                await cloudinary.uploader.destroy(publicId);
+            }
+            updates.image = req.file.path; // ✅ Save new image URL
+        }
+
+        // ✅ Update project in MongoDB
+        const updatedProject = await Project.findByIdAndUpdate(projectId, updates, { new: true });
+        if (!updatedProject) {
+            return res.status(404).json({ message: "Project not found" });
+        }
+        res.json(updatedProject);
+    } catch (err) {
+        console.error("Error updating project:", err);
+        res.status(500).json({ error: "Failed to update project" });
+    }
+});
+
+// ✅ Delete Project by ID (Admin Only)
+router.delete("/projects/:id", authMiddleware, async (req, res) => {
+    try {
+        const projectId = req.params.id;
+        const project = await Project.findById(projectId);
+        if (!project) {
+            return res.status(404).json({ message: "Project not found" });
+        }
+
+        // ✅ Delete image from Cloudinary if it exists
+        if (project.image) {
+            const cloudinaryUrlParts = project.image.split("/upload/");
+            let publicId = cloudinaryUrlParts[1].split(".")[0]; // Remove extension
+            publicId = publicId.replace(/^v\d+\//, ""); // Remove versioning
+            await cloudinary.uploader.destroy(publicId);
+        }
+
+        // ✅ Delete project from MongoDB
+        await Project.findByIdAndDelete(projectId);
+        res.status(200).json({ message: "Project deleted successfully" });
+    } catch (err) {
+        console.error("Error deleting project:", err);
+        res.status(500).json({ error: "Failed to delete project" });
+    }
+});
 
 
 module.exports = router;

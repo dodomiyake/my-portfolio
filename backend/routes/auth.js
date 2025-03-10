@@ -4,74 +4,36 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User"); // Import User model
 const router = express.Router();
 
-// ✅ Register a New Admin User
-router.post("/register", async (req, res) => {
-    try {
-        const { username, password } = req.body;
+require('dotenv').config()
 
-        // Check if user already exists
-        let user = await User.findOne({ username });
-        if (user) {
-            return res.status(400).json({ message: "User already exists" });
-        }
 
-        // Hash the password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        // Create new user
-        user = new User({ username, password: hashedPassword });
-        await user.save();
-
-        res.status(201).json({ message: "User registered successfully" });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-// ✅ Login and Get JWT Token
-router.post("/login", async (req, res) => {
-    try {
-        const { username, password } = req.body;
-
-        // Check if user exists
-        const user = await User.findOne({ username });
-        if (!user) {
-            return res.status(400).json({ message: "Invalid username or password" });
-        }
-
-        // Check password
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(400).json({ message: "Invalid username or password" });
-        }
-
-        // Generate JWT Token
-        const token = jwt.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET, { expiresIn: "1h" });
-
-        res.json({ token, user: { id: user._id, username: user.username } });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-// Admin Credentials (For Testing - Move to .env in Production)
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@example.com";
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "Admin123!";
+// Admin Credentials (Move these to .env in production)
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 // Login Route
 router.post("/login", async (req, res) => {
+    console.log("📤 Incoming Login Request:", req.body); // ✅ Debugging log
+
     const { email, password } = req.body;
 
+    if (!email || !password) {
+        console.log("❌ Missing email or password");
+        return res.status(400).json({ message: "Email and password are required" });
+    }
+
     if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
-        return res.status(401).json({ message: "Invalid credentials" });
+        console.log("❌ Invalid credentials");
+        return res.status(401).json({ message: "Invalid username or password" });
     }
 
     // Generate a JWT Token
     const token = jwt.sign({ email, role: "admin" }, process.env.JWT_SECRET, { expiresIn: "2h" });
+
+    console.log("✅ Login Successful - Token Sent");
     res.json({ token });
 });
+
+
 
 module.exports = router;

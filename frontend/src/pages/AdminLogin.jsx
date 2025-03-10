@@ -14,11 +14,20 @@ const AdminLogin = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:5000/api/auth/login", formData);
+            console.log("📤 Sending Login Request:", formData); // ✅ Debugging log
+
+            const response = await axios.post("http://localhost:5000/api/auth/login",
+                JSON.stringify(formData), // ✅ Ensure JSON data is sent
+                { headers: { "Content-Type": "application/json" } }
+            );
+
+            console.log("✅ Login Success:", response.data);
+
             localStorage.setItem("adminToken", response.data.token);
             navigate("/admin/dashboard");
         } catch (error) {
-            setError("Invalid email or password");
+            console.error("❌ Login Error:", error.response?.data?.message || error.message);
+            setError(error.response?.data?.message || "Invalid email or password");
         }
     };
 

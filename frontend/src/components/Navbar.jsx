@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-scroll";
+import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
@@ -18,18 +18,10 @@ const Navbar = () => {
 
             {/* Navbar Links */}
             <div className={`absolute top-16 right-0 w-full md:w-auto md:static md:flex bg-black md:bg-transparent md:space-x-6 transition-all duration-300 ${menuOpen ? "block" : "hidden"}`}>
-                <Link to="home" smooth={true} duration={300} onClick={() => setMenuOpen(false)}
-                    className="block px-6 py-3 text-white cursor-pointer hover:text-secondary transition">
-                    Home
-                </Link>
-                <Link to="projects" smooth={true} duration={300} onClick={() => setMenuOpen(false)}
-                    className="block px-6 py-3 text-white cursor-pointer hover:text-secondary transition">
-                    Projects
-                </Link>
-                <Link to="contact" smooth={true} duration={300} onClick={() => setMenuOpen(false)}
-                    className="block px-6 py-3 text-white cursor-pointer hover:text-secondary transition">
-                    Contact
-                </Link>
+                <Link to="/" className="block px-6 py-3 text-white cursor-pointer hover:text-secondary transition">Home</Link>
+                <Link to="/projects" className="block px-6 py-3 text-white cursor-pointer hover:text-secondary transition">Projects</Link>
+                <Link to="/contact" className="block px-6 py-3 text-white cursor-pointer hover:text-secondary transition">Contact</Link>
+                <Link to="/admin" className="block px-6 py-3 text-white cursor-pointer hover:text-secondary transition">Admin</Link>
             </div>
         </nav>
     );
