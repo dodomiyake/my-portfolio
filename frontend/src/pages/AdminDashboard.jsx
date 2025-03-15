@@ -5,7 +5,7 @@ import { Edit, Trash } from "lucide-react"; // Icons for edit & delete
 const AdminDashboard = () => {
     const [formData, setFormData] = useState({ title: "", description: "", image: null, technologies: "", liveDemo: "", sourceCode: "" });
     const [projects, setProjects] = useState([]);
-    const [editingProject, setEditingProject] = useState(null);
+    const [editingProject, setEditingProjectId] = useState(null);
     const [message, setMessage] = useState("");
 
     useEffect(() => {
@@ -51,7 +51,7 @@ const AdminDashboard = () => {
             }
 
             setMessage(editingProject ? "✅ Project updated!" : "✅ Project uploaded!");
-            setEditingProject(null);
+            setEditingProjectId(null);
             setFormData({ title: "", description: "", image: null, technologies: "", liveDemo: "", sourceCode: "" });
             fetchProjects();
         } catch (error) {
@@ -72,6 +72,33 @@ const AdminDashboard = () => {
         }
     };
 
+    // New function to handle edit button click
+    const setEditingProject = (projectId) => {
+        // Find the project with matching ID
+        const projectToEdit = projects.find(project => project._id === projectId);
+        
+        if (projectToEdit) {
+            // Set the form data with the project's current values
+            setFormData({
+                title: projectToEdit.title,
+                description: projectToEdit.description,
+                image: null, // Can't set file input value for security reasons
+                technologies: projectToEdit.technologies,
+                liveDemo: projectToEdit.liveDemo,
+                sourceCode: projectToEdit.sourceCode
+            });
+            
+            // Set the editing project ID
+            setEditingProjectId(projectId);
+        }
+    };
+
+    // Function to cancel editing
+    const cancelEditing = () => {
+        setEditingProjectId(null);
+        setFormData({ title: "", description: "", image: null, technologies: "", liveDemo: "", sourceCode: "" });
+    };
+
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10 px-6 pt-24">
             <h2 className="text-4xl font-bold mb-8 text-black">📂 Admin Dashboard</h2>
@@ -89,9 +116,21 @@ const AdminDashboard = () => {
                     <input type="text" name="liveDemo" placeholder="Live Demo URL" value={formData.liveDemo} onChange={handleChange} required className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400" />
                     <input type="text" name="sourceCode" placeholder="Source Code URL" value={formData.sourceCode} onChange={handleChange} required className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400" />
 
-                    <button type="submit" className="w-full bg-black text-white py-3 rounded-md hover:bg-gray-900 transition">
-                        {editingProject ? "Update" : "Upload"}
-                    </button>
+                    <div className="flex gap-4">
+                        <button type="submit" className="flex-1 bg-black text-white py-3 rounded-md hover:bg-gray-900 transition">
+                            {editingProject ? "Update" : "Upload"}
+                        </button>
+                        
+                        {editingProject && (
+                            <button 
+                                type="button"
+                                onClick={cancelEditing} 
+                                className="flex-1 bg-gray-300 text-gray-800 py-3 rounded-md hover:bg-gray-400 transition"
+                            >
+                                Cancel Edit
+                            </button>
+                        )}
+                    </div>
                 </form>
             </div>
 
@@ -102,7 +141,11 @@ const AdminDashboard = () => {
                     <p className="text-gray-600 text-center col-span-full">No projects uploaded yet.</p>
                 ) : (
                     projects.map((project) => (
-                        <div key={project._id} className="group bg-white p-6 rounded-lg shadow-lg relative transition hover:shadow-2xl">
+                        <div 
+                            key={project._id} 
+                            className={`group bg-white p-6 rounded-lg shadow-lg relative transition hover:shadow-2xl
+                                      ${editingProject === project._id ? 'ring-2 ring-black' : ''}`}
+                        >
                             <img src={project.image} alt={project.title} className="w-full h-40 object-cover rounded-md" />
                             <h4 className="font-bold text-xl mt-3 text-gray-800">{project.title}</h4>
                             <p className="text-gray-600 mt-1">{project.description}</p>
@@ -116,6 +159,13 @@ const AdminDashboard = () => {
                                     <Trash size={20} />
                                 </button>
                             </div>
+                            
+                            {/* Indicator if currently being edited */}
+                            {editingProject === project._id && (
+                                <div className="absolute top-2 right-2 bg-black text-white text-xs px-2 py-1 rounded-md">
+                                    Editing
+                                </div>
+                            )}
                         </div>
                     ))
                 )}

@@ -23,16 +23,40 @@ const Home = () => {
                 init={particlesInit}
                 loaded={particlesLoaded} // ✅ Ensure particles are loaded
                 options={{
-                    background: { color: "transparent" }, // Keep background transparent
+                    background: { color: "transparent" },
                     fpsLimit: 60,
                     particles: {
                         number: { value: 100, density: { enable: true, area: 800 } },
                         shape: { type: "circle" },
                         opacity: { value: 0.1, random: true },
                         size: { value: 3, random: true },
-                        color: { value: "#000000" }, // 🔥 Change to black particles
-                        move: { enable: true, speed: 1, direction: "none" },
-                        links: { enable: true, distance: 150, color: "#333333", opacity: 0.6 }, // 🔗 Darker links for visibility
+                        color: { value: "#000000" },
+                        move: {
+                            enable: true,
+                            speed: 1,
+                            direction: "none",
+                            // Add this to enable mouse interactivity
+                            outModes: {
+                                default: "bounce"
+                            }
+                        },
+                        links: { enable: true, distance: 150, color: "#333333", opacity: 0.4 },
+                    },
+                    // Section for mouse interactivity
+                    interactivity: {
+                        detectsOn: "window",
+                        events: {
+                            onHover: {
+                                enable: true,
+                                mode: "repulse"  // This makes particles move away from cursor
+                            }
+                        },
+                        modes: {
+                            repulse: {
+                                distance: 100,
+                                duration: 0.4
+                            }
+                        }
                     }
                 }}
                 className="absolute top-0 left-0 w-full h-full z-0"

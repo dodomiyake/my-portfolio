@@ -56,11 +56,35 @@ const Contact = () => {
                     particles: {
                         number: { value: 100, density: { enable: true, area: 800 } },
                         shape: { type: "circle" },
-                        opacity: { value: 0.5, random: true },
+                        opacity: { value: 0.1, random: true },
                         size: { value: 3, random: true },
-                        move: { enable: true, speed: 1.5, direction: "none" },
-                        links: { enable: true, distance: 150, color: "#333333", opacity: 0.5 },
-                        color: { value: "#000000" } // 🔥 Dark particles for visibility
+                        color: { value: "#000000" },
+                        move: {
+                            enable: true,
+                            speed: 1,
+                            direction: "none",
+                            // Add this to enable mouse interactivity
+                            outModes: {
+                                default: "bounce"
+                            }
+                        },
+                        links: { enable: true, distance: 150, color: "#333333", opacity: 0.4 },
+                    },
+                    // Section for mouse interactivity
+                    interactivity: {
+                        detectsOn: "window",
+                        events: {
+                            onHover: {
+                                enable: true,
+                                mode: "repulse"  // This makes particles move away from cursor
+                            }
+                        },
+                        modes: {
+                            repulse: {
+                                distance: 100,
+                                duration: 0.4
+                            }
+                        }
                     }
                 }}
                 className="absolute top-0 left-0 w-full h-full z-0"
@@ -152,36 +176,62 @@ const Contact = () => {
                 )}
             </motion.form>
 
-            {/* Social Media Links */}
+            {/* Enhanced Social Media Links */}
             <motion.div
-                className="mt-8 flex space-x-6 relative z-10"
+                className="mt-10 relative z-10"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.9 }}
             >
-                <motion.a
-                    href="https://github.com/dodomiyake"
-                    target="_blank"
-                    className="text-black text-3xl hover:text-gray-600 transition"
-                    whileHover={{ scale: 1.2 }}
-                >
-                    <FaGithub />
-                </motion.a>
-                <motion.a
-                    href="https://linkedin.com/in/oluwadamilolaxajayi"
-                    target="_blank"
-                    className="text-black text-3xl hover:text-gray-600 transition"
-                    whileHover={{ scale: 1.2 }}
-                >
-                    <FaLinkedin />
-                </motion.a>
-                <motion.a
-                    href="mailto:oluwadamilola.william@email.com"
-                    className="text-black text-3xl hover:text-gray-600 transition"
-                    whileHover={{ scale: 1.2 }}
-                >
-                    <FaEnvelope />
-                </motion.a>
+                <p className="text-gray-600 mb-3 text-center">Or connect with me on:</p>
+                <div className="flex space-x-8 justify-center">
+                    <motion.a
+                        href="https://github.com/dodomiyake"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex flex-col items-center text-gray-900 group"
+                        whileHover={{ scale: 1.1 }}
+                    >
+                        <div className="p-3 bg-white rounded-full shadow-md group-hover:shadow-lg transition-all">
+                            <FaGithub className="text-2xl" />
+                        </div>
+                        <span className="mt-2 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">GitHub</span>
+                    </motion.a>
+
+                    <motion.a
+                        href="https://linkedin.com/in/oluwadamilolaxajayi"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex flex-col items-center text-gray-900 group"
+                        whileHover={{ scale: 1.1 }}
+                    >
+                        <div className="p-3 bg-white rounded-full shadow-md group-hover:shadow-lg transition-all">
+                            <FaLinkedin className="text-2xl" />
+                        </div>
+                        <span className="mt-2 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">LinkedIn</span>
+                    </motion.a>
+
+                    <motion.a
+                        href="mailto:oluwadamilola.william@email.com"
+                        className="flex flex-col items-center text-gray-900 group"
+                        whileHover={{ scale: 1.1 }}
+                    >
+                        <div className="p-3 bg-white rounded-full shadow-md group-hover:shadow-lg transition-all">
+                            <FaEnvelope className="text-2xl" />
+                        </div>
+                        <span className="mt-2 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">Email</span>
+                    </motion.a>
+                </div>
+            </motion.div>
+
+            {/* Added decorative footer */}
+            <motion.div
+                className="mt-16 text-center text-gray-500 text-sm relative z-10"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.2 }}
+            >
+                <p>© {new Date().getFullYear()} Oluwadamilola Ajayi | Web Developer</p>
             </motion.div>
         </motion.div>
     );

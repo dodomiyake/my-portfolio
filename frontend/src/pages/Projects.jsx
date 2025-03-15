@@ -37,21 +37,29 @@ const Projects = () => {
                     {projects.map((project, index) => (
                         <motion.div
                             key={project._id}
-                            className="bg-slate-200 p-5 rounded-lg shadow-lg"
+                            className="bg-gradient-to-br from-slate-200 to-slate-100 p-5 rounded-lg shadow-lg"
                             whileHover={{ scale: 1.05 }} // Hover effect
                             initial={{ opacity: 0, y: 50 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }} // Staggered animation
                         >
-                            <img src={project.image} alt={project.title} className="w-full h-52 object-cover rounded-md" />
+                            <img src={project.image} alt={project.title} className="w-full h-52 object-cover rounded-md transition duration-300 hover:opacity-90" />
                             <h3 className="text-xl font-semibold mt-4 text-black">{project.title}</h3>
                             <p className="text-stone-800 mt-2">{project.description}</p>
+                            <div className="flex flex-wrap gap-2 mt-3">
+                                {project.technologies.map(tech => (
+                                    <span key={tech} className="text-xs bg-gray-800 text-white px-2 py-1 rounded">
+                                        {tech}
+                                    </span>
+                                ))}
+                            </div>
                             <div className="flex mt-4 space-x-4">
                                 {project.liveDemo && (
-                                    <a href={project.liveDemo} target="_blank" className="text-blue-400 hover:underline">Live Demo</a>
+                                    <a href={project.liveDemo} target="_blank" rel="noopener noreferrer" className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800 transition">Live Demo</a>
                                 )}
                                 {project.sourceCode && (
-                                    <a href={project.sourceCode} target="_blank" className="text-slate-600 hover:underline">Source Code</a>
+
+                                    <a href={project.sourceCode} target="_blank" rel="noopener noreferrer" className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800 transition">Source Code</a>
                                 )}
                             </div>
                         </motion.div>
