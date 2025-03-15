@@ -13,7 +13,7 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 // Login Route
 router.post("/login", async (req, res) => {
-    console.log("📤 Incoming Login Request:", req.body); // ✅ Debugging log
+    
 
     const { email, password } = req.body;
 

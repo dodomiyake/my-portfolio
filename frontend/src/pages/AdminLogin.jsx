@@ -14,15 +14,14 @@ const AdminLogin = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            console.log("📤 Sending Login Request:", formData); // ✅ Debugging log
+            
 
             const response = await axios.post("http://localhost:5000/api/auth/login",
                 JSON.stringify(formData), // ✅ Ensure JSON data is sent
                 { headers: { "Content-Type": "application/json" } }
             );
 
-            console.log("✅ Login Success:", response.data);
-
+            
             localStorage.setItem("adminToken", response.data.token);
             navigate("/admin/dashboard");
         } catch (error) {

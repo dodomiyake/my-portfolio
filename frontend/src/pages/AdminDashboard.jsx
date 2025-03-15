@@ -73,7 +73,7 @@ const AdminDashboard = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10 px-6">
+        <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10 px-6 pt-24">
             <h2 className="text-4xl font-bold mb-8 text-black">📂 Admin Dashboard</h2>
 
             {/* ✅ Upload Form */}
