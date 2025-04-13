@@ -8,7 +8,7 @@ const Projects = () => {
 
     // Fetch projects from backend
     useEffect(() => {
-        axios.get("http://localhost:5000/api/projects")
+        axios.get(`${import.meta.env.VITE_API_URL}/api/projects`)
             .then((response) => {
                 setProjects(response.data.projects);
                 setLoading(false);
