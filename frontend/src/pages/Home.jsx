@@ -109,6 +109,7 @@ const Home = () => {
                     View My Work
                 </Link>
             </motion.div>
+
         </div>
     );
 };

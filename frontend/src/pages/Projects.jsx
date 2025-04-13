@@ -65,7 +65,9 @@ const Projects = () => {
                         </motion.div>
                     ))}
                 </motion.div>
+                
             )}
+            
         </div>
     );
 };

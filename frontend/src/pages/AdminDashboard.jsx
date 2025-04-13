@@ -170,6 +170,10 @@ const AdminDashboard = () => {
                     ))
                 )}
             </div>
+            <div>
+                {/* Added decorative footer */}           
+                <p className="py-4 text-center text-gray-600 mt-auto">© {new Date().getFullYear()} Oluwadamilola Ajayi | Web Developer</p>
+            </div>
         </div>
     );
 };
