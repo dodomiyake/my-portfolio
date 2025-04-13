@@ -18,6 +18,8 @@ mongoose
 // ✅ CORS Configuration (Restrict to frontend)
 const corsOptions = {
     origin: [
+        "https://www.oluwadamilolaajayi.com", // ✅ Allow production frontend
+        "https://oluwadamilolaajayi.com", // ✅ Allow production frontend
         "http://localhost:5173", // ✅ Allow local development
         "https://my-portfolio-ro0z.onrender.com" // ✅ Allow Render frontend
     ],
