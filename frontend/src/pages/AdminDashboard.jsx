@@ -14,7 +14,7 @@ const AdminDashboard = () => {
 
     const fetchProjects = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/projects");
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/projects`);
             setProjects(response.data.projects);
         } catch (error) {
             console.error("Error fetching projects:", error);
@@ -41,11 +41,11 @@ const AdminDashboard = () => {
 
             let response;
             if (editingProject) {
-                response = await axios.put(`http://localhost:5000/api/projects/${editingProject}`, formDataToSend, {
+                response = await axios.put(`${import.meta.env.VITE_API_URL}/api/projects/${editingProject}`, formDataToSend, {
                     headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
                 });
             } else {
-                response = await axios.post("http://localhost:5000/api/projects", formDataToSend, {
+                response = await axios.post(`${import.meta.env.VITE_API_URL}/api/projects`, formDataToSend, {
                     headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
                 });
             }
@@ -63,7 +63,7 @@ const AdminDashboard = () => {
     const handleDelete = async (id) => {
         const token = localStorage.getItem("adminToken");
         try {
-            await axios.delete(`http://localhost:5000/api/projects/${id}`, {
+            await axios.delete(`${import.meta.env.VITE_API_URL}/api/projects/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             fetchProjects();
