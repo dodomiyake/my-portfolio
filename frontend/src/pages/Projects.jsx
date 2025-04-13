@@ -43,7 +43,7 @@ const Projects = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }} // Staggered animation
                         >
-                            <img src={project.image} alt={project.title} className="w-full h-52 object-cover rounded-md transition duration-300 hover:opacity-90" />
+                            <img src={project.image} alt={project.title} className="w-full h-55 object-cover rounded-md transition duration-300 hover:opacity-90" />
                             <h3 className="text-xl font-semibold mt-4 text-black">{project.title}</h3>
                             <p className="text-stone-800 mt-2">{project.description}</p>
                             <div className="flex flex-wrap gap-2 mt-3">
