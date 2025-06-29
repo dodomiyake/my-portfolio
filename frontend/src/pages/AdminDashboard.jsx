@@ -7,18 +7,34 @@ const AdminDashboard = () => {
     const [projects, setProjects] = useState([]);
     const [editingProject, setEditingProjectId] = useState(null);
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
 
     useEffect(() => {
-        fetchProjects();
+        fetchProjects(1);
     }, []);
 
-    const fetchProjects = async () => {
+    const fetchProjects = async (pageNum = 1) => {
+        setLoading(true);
         try {
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/projects`);
-            setProjects(response.data.projects);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/projects?page=${pageNum}&limit=6`);
+            if (pageNum === 1) {
+                setProjects(response.data.projects);
+            } else {
+                setProjects(prev => [...prev, ...response.data.projects]);
+            }
+            setHasMore(pageNum < response.data.totalPages);
         } catch (error) {
             console.error("Error fetching projects:", error);
         }
+        setLoading(false);
+    };
+
+    const loadMore = () => {
+        const nextPage = page + 1;
+        setPage(nextPage);
+        fetchProjects(nextPage);
     };
 
     const handleChange = (e) => {
@@ -146,7 +162,7 @@ const AdminDashboard = () => {
                             className={`group bg-white p-6 rounded-lg shadow-lg relative transition hover:shadow-2xl
                                       ${editingProject === project._id ? 'ring-2 ring-black' : ''}`}
                         >
-                            <img src={project.image} alt={project.title} className="w-full h-40 object-cover rounded-md" />
+                            <img src={project.image ? project.image.replace('/upload/', '/upload/q_auto,f_auto/') : ''} alt={project.title} className="w-full h-40 object-cover rounded-md" loading="lazy" />
                             <h4 className="font-bold text-xl mt-3 text-gray-800">{project.title}</h4>
                             <p className="text-gray-600 mt-1">{project.description}</p>
 
@@ -170,6 +186,9 @@ const AdminDashboard = () => {
                     ))
                 )}
             </div>
+            {hasMore && !loading && (
+                <button onClick={loadMore} className="mt-8 px-6 py-2 bg-black text-white rounded hover:bg-gray-800 transition">Load More</button>
+            )}
             <div>
                 {/* Added decorative footer */}           
                 <p className="py-4 text-center text-gray-600 mt-auto">© {new Date().getFullYear()} Oluwadamilola Ajayi | Web Developer</p>

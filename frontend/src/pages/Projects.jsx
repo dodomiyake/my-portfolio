@@ -5,19 +5,34 @@ import { motion } from "framer-motion";
 const Projects = () => {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
 
-    // Fetch projects from backend
-    useEffect(() => {
-        axios.get(`${import.meta.env.VITE_API_URL}/api/projects`)
-            .then((response) => {
+    const fetchProjects = async (pageNum = 1) => {
+        setLoading(true);
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/projects?page=${pageNum}&limit=6`);
+            if (pageNum === 1) {
                 setProjects(response.data.projects);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error("Error fetching projects:", error);
-                setLoading(false);
-            });
+            } else {
+                setProjects(prev => [...prev, ...response.data.projects]);
+            }
+            setHasMore(pageNum < response.data.totalPages);
+        } catch (error) {
+            console.error("Error fetching projects:", error);
+        }
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        fetchProjects(1);
     }, []);
+
+    const loadMore = () => {
+        const nextPage = page + 1;
+        setPage(nextPage);
+        fetchProjects(nextPage);
+    };
 
     return (
         <div id="projects" className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6 py-12 pt-24">
@@ -43,7 +58,7 @@ const Projects = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }} // Staggered animation
                         >
-                            <img src={project.image} alt={project.title} className="w-full h-55 object-cover rounded-md transition duration-300 hover:opacity-90" />
+                            <img src={project.image ? project.image.replace('/upload/', '/upload/q_auto,f_auto/') : ''} alt={project.title} className="w-full h-55 object-cover rounded-md transition duration-300 hover:opacity-90" loading="lazy" />
                             <h3 className="text-xl font-semibold mt-4 text-black">{project.title}</h3>
                             <p className="text-stone-800 mt-2">{project.description}</p>
                             <div className="flex flex-wrap gap-2 mt-3">
@@ -58,16 +73,17 @@ const Projects = () => {
                                     <a href={project.liveDemo} target="_blank" rel="noopener noreferrer" className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800 transition">Live Demo</a>
                                 )}
                                 {project.sourceCode && (
-
                                     <a href={project.sourceCode} target="_blank" rel="noopener noreferrer" className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800 transition">Source Code</a>
                                 )}
                             </div>
                         </motion.div>
                     ))}
                 </motion.div>
-                
             )}
             
+            {hasMore && !loading && (
+                <button onClick={loadMore} className="mt-8 px-6 py-2 bg-black text-white rounded hover:bg-gray-800 transition">Load More</button>
+            )}
         </div>
     );
 };

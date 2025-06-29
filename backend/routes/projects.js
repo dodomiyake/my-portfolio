@@ -10,7 +10,7 @@ const path = require('path'); // ✅ Used for extracting filenames correctly
 router.get('/projects', async (req, res) => {
     try {
         let page = parseInt(req.query.page) || 1;
-        let limit = parseInt(req.query.limit) || 10;
+        let limit = parseInt(req.query.limit) || 6;
         if (page < 1) page = 1;
 
         const sortField = req.query.sort || 'createdAt';
